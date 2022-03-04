@@ -13,5 +13,6 @@ most_common_resolution = Counter([img.shape for img in img_by_name.values()]).mo
 
 imgs_with_most_popular_shape = [img for img in img_by_name.values() if img.shape == most_common_resolution]
 avg_img = np.mean(imgs_with_most_popular_shape, axis=0)
+avg_img_path = Path("out") / "avg_img.jpg"
 
-cv2.imwrite(str(input_dir / "avg_img.jpg"), avg_img)
+cv2.imwrite(str(avg_img_path), avg_img)
