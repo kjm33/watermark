@@ -5,7 +5,9 @@ avg_img_path = Path("out") / "avg_img.jpg"
 avg_img = cv2.imread(str(avg_img_path))
 avg_img_gray = cv2.cvtColor(avg_img, cv2.COLOR_BGR2GRAY)
 
-laplacian = cv2.Laplacian(avg_img_gray, cv2.CV_64F)
+gauss_blur = cv2.GaussianBlur(avg_img_gray, (3, 3), 0)
+
+laplacian = cv2.Laplacian(gauss_blur, cv2.CV_64F)  # actually log - Laplacian of Gsussian
 laplacian_normalized = cv2.convertScaleAbs(laplacian)
 
 cv2.imshow('normalized Lap', laplacian_normalized)
@@ -26,7 +28,7 @@ otsu = cv2.threshold(laplacian_normalized, 0, 255, cv2.THRESH_BINARY | cv2.THRES
 cv2.imshow("Otsu", otsu)
 # bingo!
 
-lap_bin_path = Path("out") / "laplacian_bin_Otsu.jpg"
+lap_bin_path = Path("out") / "lap_of_gauss_bin_Otsu.jpg"
 
 if not lap_bin_path.exists():
     cv2.imwrite(str(lap_bin_path), otsu)
