@@ -6,6 +6,8 @@ import cv2
 
 img = cv2.imread("./samples/single_watermark_on_smooth_bckg.png", 0)
 
+img = cv2.resize(img, (100,100))
+
 
 # create the x and y coordinate arrays (here we just use pixel indices)
 xx, yy = np.mgrid[0:img.shape[0], 0:img.shape[1]]
