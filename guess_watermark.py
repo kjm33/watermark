@@ -19,10 +19,13 @@ watermark_weights = np.random.rand(*dst.shape)
 gamma = 0.0
 
 alpha = 0.01
+# TODO: test different values (simulated annealing?)
 
 for _ in range(ITERATIONS):
-    watermark = watermark_weights*255  # matrix of floats
+    watermark = watermark_weights * 255  # matrix of floats
     watermark = watermark.astype(np.uint8)  # back to uchar
+    # ^^ small changes in weights can be ignored/lost here due to casting (rounding?)
+    # TODO: check how it's cast ( and maybe round?)
 
     trans_ratio = 0.8  # let's use first element as an alpha ratio
     trans_ratio_neg = 1.0 - trans_ratio  # beta
@@ -35,6 +38,6 @@ for _ in range(ITERATIONS):
 
     delta_weights = delta / 255
 
-    watermark_weights -= delta_weights*alpha
+    watermark_weights -= delta_weights * alpha
 
 cv2.imwrite(str(Path("out") / f"guessed_wm_{ITERATIONS}_iters.jpg"), watermark)
