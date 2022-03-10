@@ -21,16 +21,24 @@ gamma = 0.0
 alpha = 0.01
 # TODO: test different values (simulated annealing?)
 
+trans_ratio = 0.8  # alpha is already used as a gradient descent learning rate
+trans_ratio_neg = 1.0 - trans_ratio  # beta
+
 for _ in range(ITERATIONS):
     watermark = watermark_weights * 255  # matrix of floats
     watermark = watermark.astype(np.uint8)  # back to uchar
     # ^^ small changes in weights can be ignored/lost here due to casting (rounding?)
     # TODO: check how it's cast ( and maybe round?)
 
-    trans_ratio = 0.8  # let's use first element as an alpha ratio
-    trans_ratio_neg = 1.0 - trans_ratio  # beta
-
+    """
+    src1	first input array.
+    alpha	weight of the first array elements.
+    src2	second input array of the same size and channel number as src1.
+    beta	weight of the second array elements.
+    gamma	scalar added to each sum.
+    """
     blended = cv2.addWeighted(src1=background, alpha=trans_ratio, src2=watermark, beta=trans_ratio_neg, gamma=gamma)
+
 
     print(mse(dst, blended))
 
