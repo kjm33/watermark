@@ -37,9 +37,9 @@ trans_ratio_neg = 1.0 - trans_ratio  # beta
 
 for _ in range(iterations):
     watermark = watermark_weights * 255  # matrix of floats
+    watermark = np.around(watermark)
     watermark = watermark.astype(np.uint8)  # back to uchar
     # ^^ small changes in weights can be ignored/lost here due to casting (rounding?)
-    # TODO: check how it's cast ( and maybe round?)
 
     """
     src1	first input array.
