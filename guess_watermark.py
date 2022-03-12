@@ -21,9 +21,10 @@ args = get_params()
 iterations = args.iterations
 
 dst = cv2.imread("./samples/center_cross_25_x_25.png", 0)
-dst_mode = 244
+dst = dst.astype(float)
+dst_mode = 244.0
 
-background = np.full(dst.shape, dst_mode, dtype=np.uint8)
+background = np.full(dst.shape, dst_mode, dtype=float)
 
 np.random.seed(42)
 watermark_weights = np.random.rand(*dst.shape)
@@ -37,8 +38,8 @@ trans_ratio_neg = 1.0 - trans_ratio  # beta
 
 for _ in range(iterations):
     watermark = watermark_weights * 255  # matrix of floats
-    watermark = np.around(watermark)
-    watermark = watermark.astype(np.uint8)  # back to uchar
+    # watermark = np.around(watermark)
+    # watermark = watermark.astype(np.uint8)  # back to uchar
     # ^^ small changes in weights can be ignored/lost here due to casting (rounding?)
 
     """
@@ -54,6 +55,8 @@ for _ in range(iterations):
 
     delta = dst - blended
     delta_weights = delta / 255
-    watermark_weights -= delta_weights * alpha
+    watermark_weights += delta_weights * alpha
 
+watermark = np.around(watermark)
+watermark = watermark.astype(np.uint8)  # back to uchar
 cv2.imwrite(str(Path("out") / f"guessed_wm_{iterations}_iters.jpg"), watermark)
