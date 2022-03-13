@@ -21,7 +21,7 @@ def mse(img1, img2):
 args = get_params()
 iterations = args.iterations
 
-dst_orig = cv2.imread("./samples/single_watermark_on_fixed_bckg_8779.png", 0)
+dst_orig = cv2.imread("./samples/center_cross_25_x_25.png", 0)
 dst = dst_orig.astype(float)
 dst_mode = 244.0
 
