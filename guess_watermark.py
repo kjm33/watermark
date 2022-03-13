@@ -9,7 +9,7 @@ def get_params():
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--iterations", type=int, default=800,
                         help="The number of iterations of GD")
-    parser.add_argument("-a", "--alpha", type=float, default=0.01,
+    parser.add_argument("-a", "--alpha", type=float, default=0.02,
                         help="GD learning rate")
     return parser.parse_args()
 
