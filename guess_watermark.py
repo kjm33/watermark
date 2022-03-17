@@ -7,7 +7,7 @@ from skimage.metrics import structural_similarity
 
 def get_params():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--iterations", type=int, default=800,
+    parser.add_argument("-i", "--iterations", type=int, default=1200,
                         help="The number of iterations of GD")
     parser.add_argument("-a", "--alpha", type=float, default=0.02,
                         help="GD learning rate")
@@ -21,7 +21,7 @@ def mse(img1, img2):
 args = get_params()
 iterations = args.iterations
 
-dst_orig = cv2.imread("./samples/center_cross_25_x_25.png", 0)
+dst_orig = cv2.imread("./samples/single_watermark_on_fixed_bckg_8779.png", 0)
 dst = dst_orig.astype(float)
 dst_mode = 244.0
 
@@ -39,9 +39,6 @@ trans_ratio_neg = 1.0 - trans_ratio  # beta
 
 for _ in range(iterations):
     watermark = watermark_weights * 255  # matrix of floats
-    # watermark = np.around(watermark)
-    # watermark = watermark.astype(np.uint8)  # back to uchar
-    # ^^ small changes in weights can be ignored/lost here due to casting (rounding?)
 
     """
     src1	first input array.
@@ -54,7 +51,7 @@ for _ in range(iterations):
     blended_rounded = np.around(blended)
     blended_uchar = blended_rounded.astype(np.uint8)
 
-    ssim, diff_img = structural_similarity(dst_orig, blended_uchar, full=True)
+    ssim = structural_similarity(dst_orig, blended_uchar)  # increases execution time 3 times o_0
 
     print(mse(dst, blended), ssim)
 
@@ -63,4 +60,3 @@ for _ in range(iterations):
     watermark_weights += delta_weights * alpha
 
 cv2.imwrite(str(Path("guessing_progress") / f"guessed_wm_{iterations}_iters.jpg"), watermark)
-cv2.imwrite(str(Path("guessing_progress") / f"diff_{iterations}_iters.jpg"), diff_img)
