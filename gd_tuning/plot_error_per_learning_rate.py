@@ -19,16 +19,25 @@ leg = ax.legend(fancybox=True, shadow=True)
 """
 
 fig, ax = plt.subplots()
+ax.set_title('MSE per iteration number for different alphas')
+
+# remove upper, right part of the frame
+plt.gca().spines['top'].set_visible(False)
+plt.gca().spines['right'].set_visible(False)
 
 for log_path in log_paths:
     basename = log_path.stem  # 'errors_a_0_01'
     alpha_str = basename.split('_a_')[-1].replace('_', '.')
     alpha = float(alpha_str)  # 0.01
-    print(f"{basename} -> {alpha}")
+    # print(f"{basename} -> {alpha}")
     data_series = np.loadtxt(log_path)
     ax.plot(data_series, label=alpha)
 
-plt.legend()
+plt.xlabel("epochs")
+plt.ylabel("MSE")
+plt.legend(loc='upper right')
 # TODO: legend and colors look poorly - move legend outside the plotting area
-plt.show()
+# https://jakevdp.github.io/PythonDataScienceHandbook/04.06-customizing-legends.html
+# plt.show()
+plt.savefig('error_per_alpha.png')
 
