@@ -15,9 +15,17 @@ cv2.imshow("median", watermarks_bin)
 
 
 contours, hierarchy = cv2.findContours(watermarks_bin, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+cnt_sorted = sorted(contours, key=cv2.contourArea, reverse=True)
+true_watermarks = cnt_sorted[:15]
 
-# for cnt in contours:
-    # x, y, w, h = cv2.boundingRect(cnt)
+# y = 20, 320, 620 -> 3 rows
+# x = 17, 317, 617, 917, 1217 -> 5 columns
+
+for idx, cnt in enumerate(cnt_sorted, start=1):
+    x, y, w, h = cv2.boundingRect(cnt)
+    area = cv2.contourArea(cnt)
+    print(f"{idx} {x} {y} {w} {h}")
+print()
 
 # from https://docs.opencv.org/4.x/df/d0d/tutorial_find_contours.html
 rng.seed(42)
