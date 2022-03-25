@@ -11,11 +11,12 @@ alpha = 0.85
 beta = 0.15
 background = np.full(sample.shape, MODE_COLOR[0], dtype=float)
 
-bckg_ratio = alpha/beta
-watermark = sample.astype(float)/beta - bckg_ratio*background
-watermark_single_channel = watermark[:, :, 0]
+for alpha100 in range(85, 5, -5):
+    alpha = alpha100/100.0
+    beta = 1 - alpha
 
-plt.imshow(watermark_single_channel)
-plt.colorbar()
-plt.show()
+    bckg_ratio = alpha/beta
+    watermark = sample.astype(float)/beta - bckg_ratio*background
+    watermark_single_channel = watermark[:, :, 0]
+    print(f"{alpha} max {watermark_single_channel.max()}")
 
