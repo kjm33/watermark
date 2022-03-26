@@ -16,13 +16,15 @@ bckg_ratio = alpha/beta
 watermark = sample.astype(float)/beta - bckg_ratio*background
 watermark_single_channel = watermark[:, :, 0]
 
-max_pixel = watermark_single_channel.max()
-gamma = int(math.ceil(max_pixel) - 255)  # 63
 
 watermark_normalized = cv2.convertScaleAbs(watermark)
 
-cv2.imshow("watermark scaled", watermark_normalized)
-# cv2.imwrite("watermark_calculated.png", watermark_normalized)
-cv2.waitKey()
+reblended = cv2.addWeighted(src1=background.astype(np.uint8), alpha=alpha, src2=watermark_normalized, beta=beta, gamma=0)
 
-# TODO: addWeighted(background, calculated_wm, w/ params) <- compare by ssim with sample image
+diff = sample - reblended
+diff_single_channel = diff[:, :, 0]
+
+plt.imshow(diff_single_channel)
+plt.colorbar()
+plt.title("Difference between original and restored images")
+plt.show()
