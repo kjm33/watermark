@@ -1,6 +1,7 @@
 from pathlib import Path
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 sample_path = Path("./watermarks/DSC_8767_5.png")
 sample = cv2.imread(str(sample_path))
@@ -25,5 +26,11 @@ test = cv2.imread("./watermarks/DSC_8511_8.png")
 test_restored = test/alpha - (beta/alpha)*watermark_normalized
 test_normalized = cv2.convertScaleAbs(test_restored)
 
-cv2.imshow("Test restored&normalized", test_normalized)
-cv2.waitKey()
+diff = test - test_restored
+diff_single_channel = diff[:, :, 0]
+
+plt.imshow(diff_single_channel)
+plt.colorbar()
+plt.title("Difference between original and restored images")
+plt.show()
+
