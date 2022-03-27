@@ -33,10 +33,11 @@ watermark_weights = np.random.rand(*dst.shape)
 gamma = 0.0
 
 alpha = args.alpha
-# TODO: test different values (simulated annealing?)
+beta = 0.9
 
 trans_ratio = 0.8  # alpha is already used as a gradient descent learning rate
 trans_ratio_neg = 1.0 - trans_ratio  # beta
+momentum = 0
 
 for _ in range(iterations):
     watermark = watermark_weights * 255  # matrix of floats
@@ -60,11 +61,11 @@ for _ in range(iterations):
 
     delta = dst - blended
     delta_weights = delta / 255
-    watermark_weights += delta_weights * alpha
+    momentum = beta*momentum - delta_weights * alpha
+    watermark_weights -= momentum
 
     if error < EPS:
         break
 
 watermark = watermark_weights * 255
-np.savetxt(str(Path("guessing_progress") / f"guessed_wm_{iterations}_iters.csv"), watermark)
 cv2.imwrite(str(Path("guessing_progress") / f"guessed_wm_{iterations}_iters.jpg"), np.around(watermark))
