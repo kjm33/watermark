@@ -29,4 +29,5 @@ for example_path in examples_paths:
 mask = reduce(cv2.bitwise_and, bin_examples)
 
 cv2.imshow("mask", mask)
+cv2.imwrite("common_mask.png", mask)
 cv2.waitKey()
