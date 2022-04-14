@@ -9,7 +9,7 @@ COMMON_MASK = None
 def _load():
     global WATERMARK
 
-    if not WATERMARK:
+    if WATERMARK is None:
         WATERMARK = cv2.imread(str(WATERMARK_PATH), cv2.IMREAD_UNCHANGED)
     return WATERMARK
 
