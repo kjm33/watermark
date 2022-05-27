@@ -31,5 +31,11 @@ def split_image(img_path: Path):
 
 
 for img_path in sorted(img_paths):
+    basename = Path(img_path).stem
+    cut_path = basename+"_"
+    cut_images = out_dir.glob(f"{cut_path}*")
+    if list(cut_images):
+        continue
+
     split_image(img_path)
     print()
